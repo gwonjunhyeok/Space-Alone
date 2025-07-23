@@ -4,20 +4,33 @@ using UnityEngine;
 
 public class AttackScript : MonoBehaviour
 {
+    public int Max_magazine = 30;
+    public int Current_magazine = 30;
     public Transform firePoint;
-
+    
     void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            GameObject bullet = ObjectPool.Instance.GetBullet(); // ½Ì±ÛÅæÀ¸·Î Á¢±Ù
-
-            if (bullet != null)
+            if(Current_magazine>=0)
             {
-                bullet.transform.position = firePoint.position;
-                bullet.transform.rotation = firePoint.rotation;//À§Ä¡ ¹× ¹æÇâ ÁöÁ¤
-                Debug.Log("ÃÑ¾Ë»ı¼º");
+                GameObject bullet = ObjectPool.Instance.GetBullet(); // ì‹±ê¸€í†¤ìœ¼ë¡œ ì ‘ê·¼
+    
+                if (bullet != null)
+                {
+                    bullet.transform.position = firePoint.position;
+                    bullet.transform.rotation = firePoint.rotation;//ìœ„ì¹˜ ë° ë°©í–¥ ì§€ì •
+                    Debug.Log("ì´ì•Œìƒì„±");
+                }
             }
+        }
+    }
+    public void Reload()
+    {
+        if(Max_magazine==Current_magazine){
+        //ì¬ì¥ì „ ì‹œê°„ ì¶”ê°€ í•„ìš”
+        //ì´ê¸°ë³„ íƒ„ì°½ìˆ˜ êµ¬ë¶„ í•„ìš”
+        Current_magazine=Max_magazine;
         }
     }
 }
