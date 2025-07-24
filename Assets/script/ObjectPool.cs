@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObjectPool : MonoBehaviour
 {
     public static ObjectPool Instance;
-    public int poolSize = 3;
+    public int poolSize = 30;
     private List<GameObject> bulletPool;
     public GameObject bulletPrefab;
     private void Awake()

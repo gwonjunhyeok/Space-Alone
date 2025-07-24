@@ -1,36 +1,68 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class AttackScript : MonoBehaviour
 {
+    public TMP_Text text;
     public int Max_magazine = 30;
     public int Current_magazine = 30;
+    public float FireDelay = 0f;
     public Transform firePoint;
-    
+
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        DelayControl();
+        FireBullet();
+        Reload();
+        MagazineText();
+    }
+    void MagazineText()
+    {
+        if (GameManage.instance.Current_Gun == "basic_gun")
         {
-            if(Current_magazine>=0)
+            text.text = Current_magazine + " / " + Max_magazine;
+        }
+    }
+    public void FireBullet()
+    {
+        if (Input.GetMouseButton(0))
+        {
+            if (Current_magazine > 0 && FireDelay <= 0f)
             {
-                GameObject bullet = ObjectPool.Instance.GetBullet(); // ì‹±ê¸€í†¤ìœ¼ë¡œ ì ‘ê·¼
-    
+                GameObject bullet = ObjectPool.Instance.GetBullet();
+
                 if (bullet != null)
                 {
                     bullet.transform.position = firePoint.position;
-                    bullet.transform.rotation = firePoint.rotation;//ìœ„ì¹˜ ë° ë°©í–¥ ì§€ì •
-                    Debug.Log("ì´ì•Œìƒì„±");
+                    bullet.transform.rotation = firePoint.rotation;
+                    FireDelay = 0.05f; // 0.5ÃÊ °£°İ
+                    Current_magazine--;
+                    Debug.Log("ÃÑ¾Ë ¹ß»ç");
                 }
             }
         }
     }
+
+    public void DelayControl()
+    {
+        if (FireDelay > 0f)
+        {
+            FireDelay -= Time.deltaTime;
+        }
+    }
+
     public void Reload()
     {
-        if(Max_magazine==Current_magazine){
-        //ì¬ì¥ì „ ì‹œê°„ ì¶”ê°€ í•„ìš”
-        //ì´ê¸°ë³„ íƒ„ì°½ìˆ˜ êµ¬ë¶„ í•„ìš”
-        Current_magazine=Max_magazine;
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            if (Current_magazine < Max_magazine)
+            {
+                // ÀçÀåÀü ½Ã°£ µî Ãß°¡ ÄÚµå ÇÊ¿ä
+                Current_magazine = Max_magazine;
+                Debug.Log("ÀçÀåÀü ¿Ï·á");
+            }
         }
     }
 }

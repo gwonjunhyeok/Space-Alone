@@ -5,11 +5,12 @@ using UnityEngine;
 
 public class GameManage : MonoBehaviour
 {
-    [Header("변수")]
+    [Header("설정창")]
     public float mouseSensitivity = 100f;
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
     public int CamState = 1;
+    public String Current_Gun = "basic_gun";
     public static GameManage instance;
     // Start is called before the first frame update
     private void Awake()
