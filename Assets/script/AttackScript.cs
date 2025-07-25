@@ -1,68 +1,100 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using GunsData;
 
 public class AttackScript : MonoBehaviour
 {
-    public TMP_Text text;
-    public int Max_magazine = 30;
-    public int Current_magazine = 30;
-    public float FireDelay = 0f;
-    public Transform firePoint;
+    public TMP_Text text;                // 탄약 수 UI 텍스트
+    public Transform firePoint;          // 총알 발사 위치
+
+    private GunData currentGunData;      // 현재 사용 중인 총기의 정보
+    public int Current_magazine = 30;    // 현재 남은 탄 수
+    private float fireDelayTimer = 0f;   // 총기 발사 딜레이 타이머
+
+    void Start()
+    {
+        SetCurrentGun(GameManage.instance.Current_Gun);// 현재 무기 이름을 기반으로 총기 정보 설정
+    }
 
     void Update()
     {
         DelayControl();
         FireBullet();
         Reload();
-        MagazineText();
+        UpdateMagazineUI();
+        ChangeGun();
     }
-    void MagazineText()
+
+    void SetCurrentGun(string gunName)
     {
-        if (GameManage.instance.Current_Gun == "basic_gun")
+        GameManage.instance.Current_Gun = gunName;
+
+        if (GunDatabase.GunDict.TryGetValue(gunName, out currentGunData))
         {
-            text.text = Current_magazine + " / " + Max_magazine;
+            Current_magazine = currentGunData.maxMagazine;
+            fireDelayTimer = 0f;
+            Debug.Log("무기 설정됨: " + gunName);
+        }
+        else
+        {
+            Debug.LogError("총기 정보 없음: " + gunName);
         }
     }
-    public void FireBullet()
+    void ChangeGun()
     {
-        if (Input.GetMouseButton(0))
+        if (Input.GetKeyDown(KeyCode.Alpha1))
         {
-            if (Current_magazine > 0 && FireDelay <= 0f)
-            {
-                GameObject bullet = ObjectPool.Instance.GetBullet();
+            SetCurrentGun("basic_gun");
+        }
+        else if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            SetCurrentGun("shotgun");
+        }
+    }
+    void FireBullet()
+    {
+        if (Input.GetMouseButton(0) && fireDelayTimer <= 0f && Current_magazine > 0)
+        {
+            GameObject bullet = ObjectPool.Instance.GetBullet(); // 오브젝트 풀에서 총알 가져오기
 
-                if (bullet != null)
-                {
-                    bullet.transform.position = firePoint.position;
-                    bullet.transform.rotation = firePoint.rotation;
-                    FireDelay = 0.05f; // 0.5초 간격
-                    Current_magazine--;
-                    Debug.Log("총알 발사");
-                }
+            if (bullet != null)
+            {
+                bullet.transform.position = firePoint.position;
+                bullet.transform.rotation = firePoint.rotation;
+
+                fireDelayTimer = currentGunData.fireDelay;
+                Current_magazine--;
+
+                Debug.Log("총 발사됨");
             }
         }
     }
 
-    public void DelayControl()
+    void DelayControl()
     {
-        if (FireDelay > 0f)
+        if (fireDelayTimer > 0f)
         {
-            FireDelay -= Time.deltaTime;
+            fireDelayTimer -= Time.deltaTime;
         }
     }
 
-    public void Reload()
+    void Reload()
     {
         if (Input.GetKeyDown(KeyCode.R))
         {
-            if (Current_magazine < Max_magazine)
+            if (Current_magazine < currentGunData.maxMagazine)
             {
-                // 재장전 시간 등 추가 코드 필요
-                Current_magazine = Max_magazine;
+                Current_magazine = currentGunData.maxMagazine;
                 Debug.Log("재장전 완료");
             }
+        }
+    }
+
+    void UpdateMagazineUI()
+    {
+        if (currentGunData != null)
+        {
+            text.text = Current_magazine + " / " + currentGunData.maxMagazine;
         }
     }
 }
