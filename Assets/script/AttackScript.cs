@@ -4,6 +4,8 @@ using GunsData;
 
 public class AttackScript : MonoBehaviour
 {
+    public AudioSource audioSource;
+    public AudioClip fireSound;
     public TMP_Text text;                // Åº¾à ¼ö UI ÅØ½ºÆ®
     public Transform firePoint;          // ÃÑ¾Ë ¹ß»ç À§Ä¡
 
@@ -64,7 +66,7 @@ public class AttackScript : MonoBehaviour
 
                 fireDelayTimer = currentGunData.fireDelay;
                 Current_magazine--;
-
+                audioSource.PlayOneShot(fireSound);
                 Debug.Log("ÃÑ ¹ß»çµÊ");
             }
         }
