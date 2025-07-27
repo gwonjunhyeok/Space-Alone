@@ -17,7 +17,7 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-        if (GameManage.instance.CamState == 1)
+        if (GameManage.instance.CamState == 1&&!GameManage.instance.isUIActive)
         {
             HandleInput();
             HandleRotation();

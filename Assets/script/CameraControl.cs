@@ -8,12 +8,15 @@ public class CameraControl : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked; // 마우스 커서 고정 및 숨김
+        
     }
 
     void Update()
     {
-        HandleLook();
+        if (!GameManage.instance.isUIActive)
+        {
+            HandleLook();
+        }
     }
 
     // 상하 회전 처리

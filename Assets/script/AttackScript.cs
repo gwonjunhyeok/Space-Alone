@@ -20,11 +20,14 @@ public class AttackScript : MonoBehaviour
 
     void Update()
     {
-        DelayControl();
-        FireBullet();
-        Reload();
-        UpdateMagazineUI();
-        ChangeGun();
+        if (!GameManage.instance.isUIActive)
+        {
+            DelayControl();
+            FireBullet();
+            Reload();
+            UpdateMagazineUI();
+            ChangeGun();
+        }
     }
 
     void SetCurrentGun(string gunName)

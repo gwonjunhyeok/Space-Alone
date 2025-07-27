@@ -18,7 +18,7 @@ public class CCTVControl : MonoBehaviour
         if (currentYRotation > 180f)
             currentYRotation -= 360f;
 
-        Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.lockState = CursorLockMode.Locked;
     }
 
     // Update is called once per frame
