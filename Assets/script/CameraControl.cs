@@ -15,7 +15,7 @@ public class CameraControl : MonoBehaviour
     {
         if (!GameManage.instance.isUIActive)
         {
-            HandleLook();
+            HandleLook(); 
         }
     }
 

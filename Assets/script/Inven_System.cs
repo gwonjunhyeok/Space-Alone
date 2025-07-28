@@ -1,50 +1,55 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Inven_System : MonoBehaviour
 {
-    public List<ItemStack> items = new List<ItemStack>();
+    public List<ItemStack> items = new();
 
     [SerializeField] private Transform mainSlotParent;
     [SerializeField] private Transform subSlotParent;
-
     [SerializeField] private Inven_Slot[] mainSlots;
     [SerializeField] private Inven_Slot[] subSlots;
 
-    private List<ItemStack> mainItems = new List<ItemStack>();
-    private List<ItemStack> subItems = new List<ItemStack>();
+    private List<ItemStack> mainItems = new();
+    private List<ItemStack> subItems = new();
 
 #if UNITY_EDITOR
-    private void OnValidate()//인스펙터 창에서 속성값 수정시 호출
+    private void OnValidate()
     {
         mainSlots = mainSlotParent.GetComponentsInChildren<Inven_Slot>();
         subSlots = subSlotParent.GetComponentsInChildren<Inven_Slot>();
     }
 #endif
 
-    void Awake()
+    private void Awake()
     {
+        for (int i = 0; i < mainSlots.Length; i++)
+        {
+            mainSlots[i].slotIndex = i;
+            mainSlots[i].isMainSlot = true;
+        }
+
+        for (int i = 0; i < subSlots.Length; i++)
+        {
+            subSlots[i].slotIndex = i;
+            subSlots[i].isMainSlot = false;
+        }
+
         FreshSlot();
     }
+
     private void Update()
     {
         UseSubItem();
+
         if (Input.GetKeyDown(KeyCode.H))
         {
-            Debug.Log("다이아몬드 지급됨"); 
             ItemData item = FindItemByName("sword");
-            if (item != null)
-            {
-                AddItem(item);
-                Debug.Log("다이아몬드 지급됨");
-            }
-            else
-            {
-                Debug.LogWarning("아이템 'diamond' 를 찾을 수 없습니다.");
-            }
+            if (item != null) AddItem(item);
+            else Debug.LogWarning("아이템 'sword'를 찾을 수 없습니다.");
         }
     }
+
     public void FreshSlot()
     {
         for (int i = 0; i < mainSlots.Length; i++)
@@ -64,22 +69,17 @@ public class Inven_System : MonoBehaviour
         }
     }
 
-
     public void AddItem(ItemData item)
     {
-        // 1. 먼저 main에 넣을 수 있는지 확인
         if (TryAddToList(mainItems, mainSlots.Length, item)) return;
-
-        // 2. main이 꽉 찼으면 sub에 넣기 시도
         if (TryAddToList(subItems, subSlots.Length, item)) return;
-
         Debug.Log("인벤토리 공간이 부족합니다.");
     }
-    private bool TryAddToList(List<ItemStack> list, int slotLimit, ItemData item)
+
+    private bool TryAddToList(List<ItemStack> list, int limit, ItemData item)
     {
-        for (int i = 0; i < list.Count; i++)
+        foreach (var stack in list)
         {
-            var stack = list[i];
             if (stack != null && stack.itemData.itemName == item.itemName && !stack.IsFull)
             {
                 stack.count++;
@@ -88,7 +88,6 @@ public class Inven_System : MonoBehaviour
             }
         }
 
-        // 빈 칸 먼저 찾기
         for (int i = 0; i < list.Count; i++)
         {
             if (list[i] == null)
@@ -99,7 +98,7 @@ public class Inven_System : MonoBehaviour
             }
         }
 
-        if (list.Count < slotLimit)
+        if (list.Count < limit)
         {
             list.Add(new ItemStack(item));
             FreshSlot();
@@ -108,76 +107,92 @@ public class Inven_System : MonoBehaviour
 
         return false;
     }
-    public void DelItem(string itemName)
+
+    public void OnSlotClicked(bool isMain, int index)
     {
-        // mainInven에서 먼저 찾기
-        if (TryRemoveFromList(mainItems, itemName)) return;
+        var list = isMain ? mainItems : subItems;
+        if (index >= list.Count || list[index] == null) return;
 
-        // 못 찾으면 subInven에서 찾기
-        if (TryRemoveFromList(subItems, itemName)) return;
+        var stack = list[index];
+        bool isSplit = Input.GetKey(KeyCode.LeftControl);
+        int moveCount = isSplit ? Mathf.FloorToInt(stack.count / 2f) : stack.count;
+        if (moveCount <= 0) return;
 
-        Debug.LogWarning("삭제하려는 아이템이 인벤토리에 없습니다: " + itemName);
+        if (isSplit) stack.count -= moveCount;
+        else list[index] = null;
+
+        DragSlot.Instance.StartDrag(isMain, index, new ItemStack(stack.itemData, moveCount), isSplit);
+        FreshSlot(); // <- 여기서 슬롯 비워짐 (아이콘 제거)
     }
-    private bool TryRemoveFromList(List<ItemStack> list, string itemName)
+
+    public void OnSlotDrop(bool isMainTarget, int targetIndex)
     {
-        for (int i = 0; i < list.Count; i++)
+        var drag = DragSlot.Instance.dragData;
+        if (drag == null) return;
+
+        var fromList = drag.fromMain ? mainItems : subItems;
+        var toList = isMainTarget ? mainItems : subItems;
+
+        if (drag.isSplit && targetIndex < toList.Count && toList[targetIndex] != null)
         {
-            if (list[i] != null && list[i].itemData.itemName == itemName)
-            {
-                list[i].count--;
-                if (list[i].count <= 0)
-                    list[i] = null;
-
-                FreshSlot();
-                return true;
-            }
+            ReturnDragItem(); return;
         }
-        return false;
+
+        if (targetIndex < toList.Count && toList[targetIndex] != null)
+        {
+            var temp = toList[targetIndex];
+            toList[targetIndex] = drag.draggedItem;
+            fromList[drag.originIndex] = temp;
+        }
+        else
+        {
+            while (toList.Count <= targetIndex) toList.Add(null);
+            toList[targetIndex] = drag.draggedItem;
+        }
+
+        DragSlot.Instance.ClearDrag();
+        FreshSlot();
     }
 
-    private void UseSubItem()//1,2,3,4번키로 아이템 사용
+    public void ReturnDragItem()
+    {
+        var drag = DragSlot.Instance.dragData;
+        if (drag == null) return;
+
+        var list = drag.fromMain ? mainItems : subItems;
+        if (drag.originIndex < list.Count && list[drag.originIndex] == null)
+            list[drag.originIndex] = drag.draggedItem;
+        else
+            list.Insert(drag.originIndex, drag.draggedItem);
+
+        DragSlot.Instance.ClearDrag();
+        FreshSlot();
+    }
+
+    private void UseSubItem()
     {
         for (int i = 0; i < 4; i++)
         {
             if (Input.GetKeyDown(KeyCode.Alpha1 + i))
             {
-                if (i >= subItems.Count)
-                {
-                    Debug.Log($"Sub 인벤 {i + 1} 칸에 아이템이 없습니다.");
-                    return;
-                }
+                if (i >= subItems.Count) return;
+                if (subItems[i] == null) return;
 
-                var item = subItems[i].itemData;
-                Debug.Log($"아이템 사용됨 (서브 인벤 {i + 1}): {item.itemName}");
-
-                // 실제 사용 로직은 여기에
-
-                DelSubItemByIndex(i); // SubInven에서만 삭제
+                Debug.Log($"서브 아이템 사용: {subItems[i].itemData.itemName}");
+                subItems[i].count--;
+                if (subItems[i].count <= 0) subItems[i] = null;
+                FreshSlot();
                 return;
             }
         }
     }
-    private void DelSubItemByIndex(int index)
-    {
-        if (index < 0 || index >= subItems.Count)
-            return;
 
-        if (subItems[index] == null) return;
-
-        subItems[index].count--;
-
-        if (subItems[index].count <= 0)
-            subItems[index] = null;
-
-        FreshSlot();
-    }
-    private ItemData FindItemByName(string name)//리소스 폴더에서 해당하는 아이템 체크
+    private ItemData FindItemByName(string name)
     {
         ItemData[] allItems = Resources.LoadAll<ItemData>("");
         foreach (var item in allItems)
         {
-            if (item.itemName == name)
-                return item;
+            if (item.itemName == name) return item;
         }
         return null;
     }

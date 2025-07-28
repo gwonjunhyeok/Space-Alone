@@ -174,6 +174,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1479764054}
   countText: {fileID: 868096108}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &72920461
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,6 +959,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1530403265}
   countText: {fileID: 975127243}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1001 &161670542
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1104,6 +1108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 850280054}
   countText: {fileID: 2068467229}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &213031788
 GameObject:
   m_ObjectHideFlags: 0
@@ -1620,6 +1626,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 954971920}
   countText: {fileID: 113649782}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &378544328
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,6 +1680,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 855296195}
   countText: {fileID: 1063195751}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &393992899
 GameObject:
   m_ObjectHideFlags: 0
@@ -1860,6 +1870,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1577393169}
   countText: {fileID: 535887546}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &404410480
 GameObject:
   m_ObjectHideFlags: 0
@@ -1912,6 +1924,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1085352103}
   countText: {fileID: 742709437}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &417202890
 GameObject:
   m_ObjectHideFlags: 0
@@ -2670,6 +2684,7 @@ RectTransform:
   - {fileID: 156412163}
   - {fileID: 2076132570}
   - {fileID: 1767994752}
+  - {fileID: 1696262871}
   m_Father: {fileID: 1056549397}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -4207,6 +4222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1745455338}
   countText: {fileID: 99683119}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &954971917
 GameObject:
   m_ObjectHideFlags: 0
@@ -4627,6 +4644,7 @@ GameObject:
   - component: {fileID: 1056549395}
   - component: {fileID: 1056549394}
   - component: {fileID: 1056549398}
+  - component: {fileID: 1056549399}
   m_Layer: 5
   m_Name: Inventory
   m_TagString: Untagged
@@ -4764,6 +4782,19 @@ MonoBehaviour:
   - {fileID: 1760723464}
   - {fileID: 1576433043}
   - {fileID: 1379949082}
+--- !u!114 &1056549399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1056549393}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9ff427be1b43a498bf10b511a42282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mItemImage: {fileID: 1696262869}
 --- !u!1 &1063195749
 GameObject:
   m_ObjectHideFlags: 0
@@ -5043,6 +5074,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 493478234}
   countText: {fileID: 1511483952}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1150398149
 GameObject:
   m_ObjectHideFlags: 0
@@ -5491,6 +5524,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 693036056}
   countText: {fileID: 1861564820}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1313684176
 GameObject:
   m_ObjectHideFlags: 0
@@ -5785,6 +5820,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 494644419}
   countText: {fileID: 689247495}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1401092841
 GameObject:
   m_ObjectHideFlags: 0
@@ -6243,6 +6280,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 767253731}
   countText: {fileID: 900100564}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1530403262
 GameObject:
   m_ObjectHideFlags: 0
@@ -6386,6 +6425,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 497801035}
   countText: {fileID: 479679716}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1577393166
 GameObject:
   m_ObjectHideFlags: 0
@@ -6529,6 +6570,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1150398152}
   countText: {fileID: 72920463}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1690562913
 GameObject:
   m_ObjectHideFlags: 0
@@ -6685,6 +6728,81 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 7.052, y: 0, z: 0}
+--- !u!1 &1696262868
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1696262871}
+  - component: {fileID: 1696262870}
+  - component: {fileID: 1696262869}
+  m_Layer: 5
+  m_Name: ChangeSlot
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1696262869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696262868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 0
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1696262870
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696262868}
+  m_CullTransparentMesh: 1
+--- !u!224 &1696262871
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696262868}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 551660186}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1701009151
 GameObject:
   m_ObjectHideFlags: 0
@@ -6737,6 +6855,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1334688821}
   countText: {fileID: 1948698952}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1727923097
 GameObject:
   m_ObjectHideFlags: 0
@@ -6789,6 +6909,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 299172130}
   countText: {fileID: 393992901}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1745455335
 GameObject:
   m_ObjectHideFlags: 0
@@ -6932,6 +7054,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1773698974}
   countText: {fileID: 2047357725}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1760723462
 GameObject:
   m_ObjectHideFlags: 0
@@ -6984,6 +7108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 723521984}
   countText: {fileID: 230057135}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &1761801382
 GameObject:
   m_ObjectHideFlags: 0
@@ -7679,6 +7805,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 875404244}
   countText: {fileID: 499000557}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1 &2047357723
 GameObject:
   m_ObjectHideFlags: 0
@@ -8246,6 +8374,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   image: {fileID: 1050426471}
   countText: {fileID: 99683119}
+  slotIndex: 0
+  isMainSlot: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
