@@ -39,22 +39,6 @@ public class DragSlot : Singleton<DragSlot>
         }
     }
 
-    private void SetIconByItemName(string itemName)
-    {
-        Sprite icon = Resources.Load<Sprite>($"ItemIcons/{itemName}");
-        if (icon != null)
-        {
-            mItemImage.sprite = icon;
-            SetColor(1f);
-        }
-        else
-        {
-            Debug.LogWarning($"[DragSlot] Resources과 일치하는 아이콘 없음: {itemName}");
-            mItemImage.sprite = null;
-            SetColor(0f);
-        }
-    }
-
     public void ClearDrag()
     {
         dragData = null;

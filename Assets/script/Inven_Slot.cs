@@ -77,18 +77,19 @@ public class Inven_Slot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         isPointerDown = false;
         holdTime = 0f;
 
-        if (eventData.button == PointerEventData.InputButton.Left &&
-            DragSlot.Instance.dragData != null)
+        if (eventData.button != PointerEventData.InputButton.Left) return;
+
+        if (DragSlot.Instance.dragData != null)
         {
-            invenSystem.OnSlotDrop(isMainSlot, slotIndex);
-        }
-        else
-        {
-            // 드래그 중이지만 슬롯이 아닌 데서 뗀 경우
-            if (DragSlot.Instance.dragData != null)
+            if (invenSystem.IsPointerOverSlot(out Inven_Slot targetSlot))
             {
-                invenSystem.ReturnDragItem();  // 원래 자리로 되돌림
+                invenSystem.OnSlotDrop(targetSlot.isMainSlot, targetSlot.slotIndex);
+            }
+            else
+            {
+                invenSystem.ReturnDragItem(); // 슬롯이 아니면 원래대로
             }
         }
     }
+
 }

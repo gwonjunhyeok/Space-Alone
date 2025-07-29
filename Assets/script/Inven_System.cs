@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using System.Linq;
 
 public class Inven_System : MonoBehaviour
 {
@@ -45,6 +47,12 @@ public class Inven_System : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.H))
         {
             ItemData item = FindItemByName("sword");
+            if (item != null) AddItem(item);
+            else Debug.LogWarning("아이템 'sword'를 찾을 수 없습니다.");
+        }
+        else if (Input.GetKeyDown(KeyCode.Y))
+        {
+            ItemData item = FindItemByName("diamond");
             if (item != null) AddItem(item);
             else Debug.LogWarning("아이템 'sword'를 찾을 수 없습니다.");
         }
@@ -122,7 +130,7 @@ public class Inven_System : MonoBehaviour
         else list[index] = null;
 
         DragSlot.Instance.StartDrag(isMain, index, new ItemStack(stack.itemData, moveCount), isSplit);
-        FreshSlot(); // <- 여기서 슬롯 비워짐 (아이콘 제거)
+        FreshSlot();
     }
 
     public void OnSlotDrop(bool isMainTarget, int targetIndex)
@@ -133,21 +141,64 @@ public class Inven_System : MonoBehaviour
         var fromList = drag.fromMain ? mainItems : subItems;
         var toList = isMainTarget ? mainItems : subItems;
 
-        if (drag.isSplit && targetIndex < toList.Count && toList[targetIndex] != null)
+        // drag 정보
+        var dragged = drag.draggedItem;
+        var originIndex = drag.originIndex;
+
+        // 병합 가능한 경우
+        if (targetIndex < toList.Count && toList[targetIndex] != null)
         {
-            ReturnDragItem(); return;
+            var targetStack = toList[targetIndex];
+
+            if (targetStack.itemData.itemName == dragged.itemData.itemName)
+            {
+                int total = targetStack.count + dragged.count;
+                int max = targetStack.itemData.maxStack;
+
+                if (total <= max)
+                {
+                    targetStack.count = total;
+                    if (!drag.isSplit) fromList[originIndex] = null;
+                }
+                else
+                {
+                    int canMove = max - targetStack.count;
+                    targetStack.count = max;
+                    dragged.count -= canMove;
+
+                    if (!drag.isSplit)
+                    {
+                        if (fromList[originIndex] == null)
+                            fromList[originIndex] = dragged;
+                        else
+                            fromList[originIndex].count = dragged.count;
+                    }
+                    ReturnDragItem(); // 잔여분 다시 원래 슬롯으로
+                }
+
+                DragSlot.Instance.ClearDrag();
+                FreshSlot();
+                return;
+            }
         }
 
+        // 교체 로직
         if (targetIndex < toList.Count && toList[targetIndex] != null)
         {
             var temp = toList[targetIndex];
-            toList[targetIndex] = drag.draggedItem;
-            fromList[drag.originIndex] = temp;
+            toList[targetIndex] = dragged;
+            fromList[originIndex] = temp;
         }
         else
         {
             while (toList.Count <= targetIndex) toList.Add(null);
-            toList[targetIndex] = drag.draggedItem;
+            toList[targetIndex] = dragged;
+
+            if (!drag.isSplit)
+            {
+                if (originIndex < fromList.Count)
+                    fromList[originIndex] = null;
+            }
         }
 
         DragSlot.Instance.ClearDrag();
@@ -162,11 +213,34 @@ public class Inven_System : MonoBehaviour
         var list = drag.fromMain ? mainItems : subItems;
         if (drag.originIndex < list.Count && list[drag.originIndex] == null)
             list[drag.originIndex] = drag.draggedItem;
-        else
+        else if (!list.Contains(drag.draggedItem))
             list.Insert(drag.originIndex, drag.draggedItem);
 
         DragSlot.Instance.ClearDrag();
         FreshSlot();
+    }
+
+    public bool IsPointerOverSlot(out Inven_Slot slot)
+    {
+        PointerEventData eventData = new PointerEventData(EventSystem.current)
+        {
+            position = Input.mousePosition
+        };
+
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventData, results);
+
+        foreach (RaycastResult result in results)
+        {
+            slot = result.gameObject.GetComponentInParent<Inven_Slot>();
+            if (slot != null)
+            {
+                return true;
+            }
+        }
+
+        slot = null;
+        return false;
     }
 
     private void UseSubItem()
