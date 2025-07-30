@@ -63,7 +63,7 @@ public class Inven_Slot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         hasItem = false;
     }
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPointerDown(PointerEventData eventData)//함수는 해당 오브젝트 위에서 마우스 버튼이 내려가는 순간
     {
         if (eventData.button == PointerEventData.InputButton.Left)
         {
@@ -72,7 +72,7 @@ public class Inven_Slot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
     }
 
-    public void OnPointerUp(PointerEventData eventData)
+    public void OnPointerUp(PointerEventData eventData)//함수는 해당 오브젝트 위에서  눌렀던 마우스 버튼을 떼는 순간
     {
         isPointerDown = false;
         holdTime = 0f;
@@ -87,7 +87,14 @@ public class Inven_Slot : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
             }
             else
             {
-                invenSystem.ReturnDragItem(); // 슬롯이 아니면 원래대로
+                if (invenSystem.IsPointerOutsideInventory())
+                {
+                    invenSystem.DiscardItem(); // 아이템 버리기 처리
+                }
+                else
+                {
+                    invenSystem.ReturnDragItem(); // 인벤 내부지만 슬롯 아님: 되돌리기
+                }
             }
         }
     }

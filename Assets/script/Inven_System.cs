@@ -11,6 +11,7 @@ public class Inven_System : MonoBehaviour
     [SerializeField] private Transform subSlotParent;
     [SerializeField] private Inven_Slot[] mainSlots;
     [SerializeField] private Inven_Slot[] subSlots;
+    [SerializeField] private RectTransform[] inventoryPanels; // 드래그 외부 판단용
 
     private List<ItemStack> mainItems = new();
     private List<ItemStack> subItems = new();
@@ -48,13 +49,13 @@ public class Inven_System : MonoBehaviour
         {
             ItemData item = FindItemByName("sword");
             if (item != null) AddItem(item);
-            else Debug.LogWarning("아이템 'sword'를 찾을 수 없습니다.");
+            else Debug.LogWarning("아이템 'sword'가 없습니다.");
         }
         else if (Input.GetKeyDown(KeyCode.Y))
         {
             ItemData item = FindItemByName("diamond");
             if (item != null) AddItem(item);
-            else Debug.LogWarning("아이템 'sword'를 찾을 수 없습니다.");
+            else Debug.LogWarning("아이템 'diamond'가 없습니다.");
         }
     }
 
@@ -141,11 +142,9 @@ public class Inven_System : MonoBehaviour
         var fromList = drag.fromMain ? mainItems : subItems;
         var toList = isMainTarget ? mainItems : subItems;
 
-        // drag 정보
         var dragged = drag.draggedItem;
         var originIndex = drag.originIndex;
 
-        // 병합 가능한 경우
         if (targetIndex < toList.Count && toList[targetIndex] != null)
         {
             var targetStack = toList[targetIndex];
@@ -173,7 +172,7 @@ public class Inven_System : MonoBehaviour
                         else
                             fromList[originIndex].count = dragged.count;
                     }
-                    ReturnDragItem(); // 잔여분 다시 원래 슬롯으로
+                    ReturnDragItem();
                 }
 
                 DragSlot.Instance.ClearDrag();
@@ -182,7 +181,6 @@ public class Inven_System : MonoBehaviour
             }
         }
 
-        // 교체 로직
         if (targetIndex < toList.Count && toList[targetIndex] != null)
         {
             var temp = toList[targetIndex];
@@ -194,11 +192,8 @@ public class Inven_System : MonoBehaviour
             while (toList.Count <= targetIndex) toList.Add(null);
             toList[targetIndex] = dragged;
 
-            if (!drag.isSplit)
-            {
-                if (originIndex < fromList.Count)
-                    fromList[originIndex] = null;
-            }
+            if (!drag.isSplit && originIndex < fromList.Count)
+                fromList[originIndex] = null;
         }
 
         DragSlot.Instance.ClearDrag();
@@ -227,16 +222,13 @@ public class Inven_System : MonoBehaviour
             position = Input.mousePosition
         };
 
-        List<RaycastResult> results = new List<RaycastResult>();
+        List<RaycastResult> results = new();
         EventSystem.current.RaycastAll(eventData, results);
 
         foreach (RaycastResult result in results)
         {
             slot = result.gameObject.GetComponentInParent<Inven_Slot>();
-            if (slot != null)
-            {
-                return true;
-            }
+            if (slot != null) return true;
         }
 
         slot = null;
@@ -269,5 +261,25 @@ public class Inven_System : MonoBehaviour
             if (item.itemName == name) return item;
         }
         return null;
+    }
+
+    public bool IsPointerOutsideInventory()
+    {
+        Vector2 mousePos = Input.mousePosition;
+        foreach (RectTransform panel in inventoryPanels)
+        {
+            if (RectTransformUtility.RectangleContainsScreenPoint(panel, mousePos)) return false;
+        }
+        return true;
+    }
+
+    public void DiscardItem()
+    {
+        var drag = DragSlot.Instance.dragData;
+        if (drag == null) return;
+
+        Debug.Log($"아이템 버려짐: {drag.draggedItem.itemData.itemName} x{drag.draggedItem.count}");
+        DragSlot.Instance.ClearDrag();
+        FreshSlot();
     }
 }
