@@ -7159,6 +7159,7 @@ GameObject:
   - component: {fileID: 1761801383}
   - component: {fileID: 1761801387}
   - component: {fileID: 1761801388}
+  - component: {fileID: 1761801389}
   m_Layer: 0
   m_Name: GameManage
   m_TagString: Untagged
@@ -7198,7 +7199,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isUIActive: 0
   mouseSensitivity: 500
-  moveSpeed: 0.5
+  moveSpeed: 4.47
   jumpForce: 1
   CamState: 1
   Current_Gun: basic_gun
@@ -7232,6 +7233,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolSize: 30
   bulletPrefab: {fileID: 4262910344784094232, guid: a69af2a1c2d674e48be6cf1983e12420, type: 3}
+  MonsterPoolSize: 10
+  MonsterPrefab: {fileID: 0}
 --- !u!114 &1761801388
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7249,6 +7252,20 @@ MonoBehaviour:
   lineSize: 4
   gun: {fileID: 1417575049}
   handPos: {fileID: 417202891}
+--- !u!114 &1761801389
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761801382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4591db09286c8349b8b727c93b0c41e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fadePanel: {fileID: 0}
+  fadeDuration: 1
 --- !u!1 &1767994751
 GameObject:
   m_ObjectHideFlags: 0

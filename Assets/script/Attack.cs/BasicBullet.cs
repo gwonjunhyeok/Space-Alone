@@ -24,9 +24,14 @@ public class BasicBullet : MonoBehaviour
             Debug.Log("총알 생명주기 종료");
         }
     }
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter(Collision coll)
     {
         gameObject.SetActive(false);
         Debug.Log("총알 충돌 후 삭제");
+        if (coll.collider.CompareTag("BugMonster"))
+        {
+            gameObject.SetActive(false);
+            Debug.Log("몬스터 인식");
+        }
     }
 }

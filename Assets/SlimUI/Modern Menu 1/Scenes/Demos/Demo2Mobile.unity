@@ -13,7 +13,7 @@ OcclusionCullingSettings:
 --- !u!104 &2
 RenderSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 10
+  serializedVersion: 9
   m_Fog: 1
   m_FogColor: {r: 0, g: 0, b: 0, a: 1}
   m_FogMode: 3
@@ -42,8 +42,8 @@ RenderSettings:
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
-  serializedVersion: 13
-  m_BakeOnSceneLoad: 1
+  serializedVersion: 12
+  m_GIWorkflowMode: 1
   m_GISettings:
     serializedVersion: 2
     m_BounceScale: 1
@@ -66,6 +66,9 @@ LightmapSettings:
     m_LightmapParameters: {fileID: 0}
     m_LightmapsBakeMode: 1
     m_TextureCompression: 1
+    m_FinalGather: 0
+    m_FinalGatherFiltering: 1
+    m_FinalGatherRayCount: 256
     m_ReflectionCompression: 2
     m_MixedBakeMode: 1
     m_BakeBackend: 0
@@ -94,8 +97,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 4890085278179872738, guid: 022d7ddf30e7509408b7424954ba899e,
-    type: 2}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: 022d7ddf30e7509408b7424954ba899e, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -176,33 +178,27 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 33166621072548818, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 33166621072548818, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 33349244737319514, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 33349244737319514, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 33771953304576390, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 33771953304576390, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
-    - target: {fileID: 95217651461674426, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 95217651461674426, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 5fd305d85c618db428d42570efc3dd94, type: 2}
-    - target: {fileID: 95344473243339548, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 95344473243339548, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 5fd305d85c618db428d42570efc3dd94, type: 2}
-    - target: {fileID: 95811273309965970, guid: 72743ef12d244f244b6885f84968ea34,
-        type: 3}
+    - target: {fileID: 95811273309965970, guid: 72743ef12d244f244b6885f84968ea34, type: 3}
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 5fd305d85c618db428d42570efc3dd94, type: 2}

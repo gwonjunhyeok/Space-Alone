@@ -4,6 +4,7 @@ using GunsData;
 
 public class AttackScript : MonoBehaviour
 {
+    Animator anim;
     public AudioSource audioSource;
     public AudioClip fireSound;
     public TMP_Text text;                // 탄약 수 UI 텍스트
@@ -15,6 +16,7 @@ public class AttackScript : MonoBehaviour
 
     void Start()
     {
+        anim = GetComponent<Animator>();
         SetCurrentGun(GameManage.instance.Current_Gun);// 현재 무기 이름을 기반으로 총기 정보 설정
     }
 

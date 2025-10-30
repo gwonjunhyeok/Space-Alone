@@ -8,27 +8,35 @@ public class PlayerMove : MonoBehaviour
     private Rigidbody rb;
     private Vector3 inputDirection;
     private bool jumpRequested = false;
+    Animator anim;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
     }
-
+    private void Awake()
+    {
+        anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
+    }
     void Update()
     {
-        if (GameManage.instance.CamState == 1&&!GameManage.instance.isUIActive)
+        if (GameManage.instance.CamState == 1 && !GameManage.instance.isUIActive)
         {
             HandleInput();
             HandleRotation();
             HandleMovement();
             HandleJump();
         }
-    }
-
-    void FixedUpdate()
-    {
-
+        MoveAnim();
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            anim.SetInteger("Player_State", 5);
+            //anim.SetInteger("Player_State", 6);
+            Debug.Log(".");
+        }
+        //else
+        //    anim.SetInteger("Player_State", 0);
     }
 
     // 涝仿 贸府
@@ -64,6 +72,19 @@ public class PlayerMove : MonoBehaviour
         rb.MovePosition(rb.position + move);
     }
 
+    void MoveAnim()
+    {
+        if (Input.GetKey(KeyCode.W))
+            anim.SetInteger("Player_State", 1);
+        else if (Input.GetKey(KeyCode.A))
+            anim.SetInteger("Player_State", 2);
+        else if (Input.GetKey(KeyCode.S))
+            anim.SetInteger("Player_State", 3);
+        else if (Input.GetKey(KeyCode.D))
+            anim.SetInteger("Player_State", 4);
+        //else
+        //    anim.SetInteger("Player_State", 0);
+    }
     // 痢橇 贸府
     void HandleJump()
     {
